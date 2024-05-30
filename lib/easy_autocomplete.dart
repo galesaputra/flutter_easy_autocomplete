@@ -95,29 +95,33 @@ class EasyAutocomplete extends StatefulWidget {
   /// Can be used to validate field value
   final String? Function(String?)? validator;
 
+  /// Suggestion Size
+  final double? suggestionHeight;
+
   /// Creates a autocomplete widget to help you manage your suggestions
-  const EasyAutocomplete(
-      {this.suggestions,
-      this.asyncSuggestions,
-      this.suggestionBuilder,
-      this.progressIndicatorBuilder,
-      this.controller,
-      this.decoration = const InputDecoration(),
-      this.onChanged,
-      this.onSubmitted,
-      this.inputFormatter = const [],
-      this.initialValue,
-      this.autofocus = false,
-      this.textCapitalization = TextCapitalization.sentences,
-      this.keyboardType = TextInputType.text,
-      this.focusNode,
-      this.cursorColor,
-      this.inputTextStyle = const TextStyle(),
-      this.suggestionTextStyle = const TextStyle(),
-      this.suggestionBackgroundColor,
-      this.debounceDuration = const Duration(milliseconds: 400),
-      this.validator})
-      : assert(onChanged != null || controller != null,
+  const EasyAutocomplete({
+    this.suggestions,
+    this.asyncSuggestions,
+    this.suggestionBuilder,
+    this.progressIndicatorBuilder,
+    this.controller,
+    this.decoration = const InputDecoration(),
+    this.onChanged,
+    this.onSubmitted,
+    this.inputFormatter = const [],
+    this.initialValue,
+    this.autofocus = false,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.keyboardType = TextInputType.text,
+    this.focusNode,
+    this.cursorColor,
+    this.inputTextStyle = const TextStyle(),
+    this.suggestionTextStyle = const TextStyle(),
+    this.suggestionBackgroundColor,
+    this.debounceDuration = const Duration(milliseconds: 400),
+    this.validator,
+    this.suggestionHeight,
+  })  : assert(onChanged != null || controller != null,
             'onChanged and controller parameters cannot be both null at the same time'),
         assert(!(controller != null && initialValue != null),
             'controller and initialValue cannot be used at the same time'),
@@ -171,6 +175,7 @@ class _EasyAutocompleteState extends State<EasyAutocomplete> {
               left: offset.dx,
               top: offset.dy + size.height + 5.0,
               width: size.width,
+              height: widget.suggestionHeight ?? 600,
               child: CompositedTransformFollower(
                   link: _layerLink,
                   showWhenUnlinked: false,
@@ -204,7 +209,7 @@ class _EasyAutocompleteState extends State<EasyAutocomplete> {
   void closeOverlay() {
     if (_hasOpenedOverlay) {
       _overlayEntry!.remove();
-      setState(() { 
+      setState(() {
         _hasOpenedOverlay = false;
       });
     }
